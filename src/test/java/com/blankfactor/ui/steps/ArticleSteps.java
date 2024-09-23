@@ -1,6 +1,7 @@
 package com.blankfactor.ui.steps;
 
 import com.blankfactor.ui.pages.ArticlePage;
+import io.qameta.allure.Step;
 import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -13,7 +14,7 @@ public class ArticleSteps {
     public ArticleSteps(ArticlePage articlePage){
         this.articlePage = articlePage;
     }
-
+    @Step("Validate current article is the expected: {0}")
     public void validateCurrentArticleIsTheExpected(String keywords){
         SoftAssertions assertions = new SoftAssertions();
         assertions.assertThat(articlePage.getDriver().getCurrentUrl())
@@ -31,7 +32,7 @@ public class ArticleSteps {
                 .contains(keywords);
         assertions.assertAll();
     }
-
+    @Step("Subscribe to the newsletter")
     public void subscribeToTheNewsLetter(){
         articlePage.subscribeToTheNewsLetter();
     }

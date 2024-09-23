@@ -1,15 +1,14 @@
 package com.blankfactor.ui.pages;
 
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import io.qameta.allure.Allure;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
 import java.time.Duration;
 
 public class BasePage {
@@ -38,13 +37,17 @@ public class BasePage {
         webElement.sendKeys(text);
         String message = "Send '" + text + "' to " + webElement.getAttribute("placeholder");
         logger.info(message);
+        Allure.step(message);
+        addScreenshot(message);
     }
 
     public void click(WebElement webElement) {
         getFluentWait().until(ExpectedConditions.elementToBeClickable(webElement));
         String message = "Click on " + webElement.getAttribute("id");
         logger.info(message);
+        Allure.step(message);
         webElement.click();
+        addScreenshot(message);
     }
 
     public void scrollPageEnd() {
@@ -52,7 +55,7 @@ public class BasePage {
                 .sendKeys(Keys.END).perform();
     }
 
-    public void scrollToSpecificPagePoint(){
+    public void scrollToSpecificPagePoint() {
         new Actions(driver)
                 .sendKeys(Keys.PAGE_DOWN)
                 .pause(Duration.ofMillis(500))
@@ -65,11 +68,23 @@ public class BasePage {
                 .perform();
     }
 
-    public void moveToElement(WebElement element){
+    public void moveToElement(WebElement element) {
         new Actions(driver).moveToElement(element).perform();
+    }
+
+    void addScreenshot(String message) {
+        if (Boolean.parseBoolean(getParameterValue("showAllureAttachments"))) {
+            String filename = message.toLowerCase().replaceAll("'","").replaceAll("[^A-Za-z0-9]", "_");
+            String fileExtension = ".png";
+            String completeFileName = filename.concat(fileExtension);
+            Allure.addAttachment(completeFileName, new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
+        }
     }
 
     public String getCurrentUrl() {
         return driver.getCurrentUrl();
+    }
+    private String getParameterValue(String key) {
+        return System.getProperty(key);
     }
 }

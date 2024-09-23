@@ -7,12 +7,16 @@ import com.blankfactor.ui.pages.SearchPage;
 import com.blankfactor.ui.steps.ArticleSteps;
 import com.blankfactor.ui.steps.HomeSteps;
 import com.blankfactor.ui.steps.SearchArticleSteps;
-import org.assertj.core.api.SoftAssertions;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
-
+@DisplayName("Search article test")
+@Epic("Search")
 public class SearchArticleTest {
     private WebDriver driver;
     private HomeSteps homeSteps;
@@ -37,7 +41,10 @@ public class SearchArticleTest {
     }
 
     @Test
-    public void searchAnArticleAndSuscribe() {
+    @DisplayName("Search an Article and subscribe")
+    @Description("Example of an article search into the hipertextual webpage")
+    @Feature("Search articles")
+    public void searchAnArticleAndSubscribe() {
         homeSteps.searchWithKeyWords("Steve Jobs");
         searchArticleSteps.selectFirstArticleWithKeywords("Reed Jobs");
         articleSteps.validateCurrentArticleIsTheExpected("Reed Jobs");
